@@ -1,0 +1,22 @@
+/* Sidepanel.css */
+.sidepanel-item:hover {
+  background-color: #DC143C; /* Change background color on hover */
+}
+
+.sidepanel-item:hover .MuiSvgIcon-root {
+  fill: #FFF; /* Change icon color on hover */
+}
+
+.sidepanel-item:hover .MuiTypography-root {
+  color: #FFF; /* Change text color on hover */
+}
+
+
+
+
+
+
+
+
+
+

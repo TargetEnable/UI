@@ -1,0 +1,71 @@
+.app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+  }
+  
+  .circle-row {
+    display: flex;
+    align-items: center;
+  }
+  
+  .incident-circle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px 30px; /* Adjust this margin as needed */
+  }
+  
+  .white-square {
+    width: 230px;
+    height: 230px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: rgba(83, 77, 77, 0.5);
+    box-shadow: inset -5px -5px #52d0f0e7;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    align-items: center;
+  }
+  
+  .white-title-square {
+    width: 233px;
+    height: 50px;
+    box-shadow: 0 0 10px rgba(177, 167, 167, 0.1);
+    background-color: rgba(143, 132, 132, 0.5);
+    box-shadow: inset -5px -5px #52d0f0e7;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px; /* Adjust this margin as needed */
+  }
+  
+  .incident-count {
+    width: 150px;
+    height: 150px;
+    border: 10px solid transparent;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 50px;
+    font-weight: bold;
+  }
+  
+  .incident-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+  }
+  .button{
+    color: black;
+    display: flex;
+    position: relative;
+    margin-top: 10px;
+    margin-right: 1100px;
+    margin-bottom: 50px;
+  }

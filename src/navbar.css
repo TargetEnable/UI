@@ -1,0 +1,6 @@
+.icon{
+    border: none;
+}
+.icon:hover{
+    color: red;
+}

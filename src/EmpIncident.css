@@ -1,0 +1,35 @@
+* Add more CSS as needed for your specific design */
+
+/* Styling for resolution and resolution date */
+.complete-section {
+  margin-top: 10px;
+}
+
+.complete-section label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.complete-section textarea,
+.complete-section input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.complete-section button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.complete-section button:hover {
+  background-color: #0056b3;
+}

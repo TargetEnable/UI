@@ -1,0 +1,131 @@
+/* Reset some default browser styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Page layout */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 40px;
+  }
+  
+  /* Heading style */
+  .page-heading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Basic styling for the table */
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    margin-top: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #e0e0e0;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f0f0f0;
+  }
+  
+  /* Styling for the priority indicators */
+  .priority-indicator {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+  }
+  
+  .high {
+    background-color: red;
+    color: white;
+  }
+  
+  .medium {
+    background-color: orange;
+    color: white;
+  }
+  
+  .low {
+    background-color: green;
+    color: white;
+  }
+  
+  /* Styling for the expanded rows */
+  .expanded-row {
+    background-color: #f5f5f5;
+  }
+  
+  .incident-details {
+    padding: 10px;
+  }
+  
+  .incident-details p {
+    margin-bottom: 8px;
+  }
+  
+  .assign-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .assign-label {
+    margin-right: 10px;
+    font-weight: bold;
+  }
+  
+  .assign-section select {
+    padding: 8px;
+  }
+  
+  .assign-section button {
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    width: fit-content;
+  }
+  
+  .assign-section button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Add more CSS as needed for your specific design */
+
+  .navbar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%; /* Adjust the width as needed */
+    background-color: #0c0a0a;
+    color: #0e0c0c;
+    padding: 10px 0; /* Add some padding for better visibility */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    line-height: 1.5;
+  }
+  
+  /* Rest of your styles... */
+  
+
+  .logo {
+    background-color: #0c0a0a;
+    padding: 1px 0; /* Adjust padding as needed */
+    position: absolute;
+    top: 20;
+    left: 0;
+    width: 100%;
+  }
