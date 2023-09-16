@@ -15,7 +15,11 @@
     "bcryptjs": "^2.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
     "react-responsive-carousel": "^3.2.23",
+=======
+     "react-responsive-carousel": "^3.2.23",
+>>>>>>> aba374b9845089fa3f54dc16def4a1a352515872
     "react-router-dom": "^6.16.0",
     "react-scripts": "^5.0.1",
     "react-toastify": "^9.1.3",
