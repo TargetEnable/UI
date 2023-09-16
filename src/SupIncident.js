@@ -6,10 +6,6 @@ import { getIncidents, updateIncidents, getsupport } from './services/userServic
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const initialIncidentsData = [
-  // Your initial incidents data...
-];
-
 const IncidentTable = () => {
   const [expandedIncidentId, setExpandedIncidentId] = useState(null);
   const [selectedStaff, setSelectedStaff] = useState('');
@@ -19,6 +15,9 @@ const IncidentTable = () => {
 
   useEffect(() => {
     // Fetch data from the backend when the component mounts
+    const params = new URLSearchParams(window.location.search);
+    const selectedStatusParam = params.get('status');
+    setSelectedStatus(selectedStatusParam || 'All');
     getIncidents()
       .then((data) => {
         // Update the state with the fetched data
@@ -35,8 +34,8 @@ const IncidentTable = () => {
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-      });
-  }, [selectedStatus]);
+      }); 
+    }, []);
   console.log(staffOptions);
 
   const toggleExpand = (incidentId) => {
@@ -201,5 +200,3 @@ const IncidentDetails = () => {
 };
 
 export default IncidentDetails;
-
-

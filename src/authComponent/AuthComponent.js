@@ -28,7 +28,7 @@ export const AuthComponent = () => {
                     <Route exact path="/admin/dashboard" element={role ==='admin'?<SupDash/>:<PageNotFound/>}/>
                     <Route exact path="/admin/incident_assignment" element={role ==='admin'?<IncidentDetails/>:<PageNotFound/>}/>
                     <Route exact path="/support/incident" element={role ==='support'?<Incident/>:<PageNotFound/>}/>
-                    {/* <Route exact path="/logout" element={<LoginPage/>}/> */}
+                    
                 </Routes>  
             </>    
         )

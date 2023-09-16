@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; 
-import Button from '@mui/material/Button';
-import './SupDash.css'; // You can import your CSS styles here
+import './SupDash.css'; 
 import Navbar from './Navibar.js';
 
-const IncidentCircle = ({ count, title, color }) => {
+const IncidentCircle = ({ count, title, color, handleStatusClick }) => {
   return (
-    <div className="incident-circle">
+    <div className="incident-circle" onClick={handleStatusClick}>
       <div className="white-square">
         <div className="incident-count" style={{ backgroundColor: color }}>
           {count}
@@ -21,17 +20,25 @@ const IncidentCircle = ({ count, title, color }) => {
 
 const SupDash = () => {
   const incidents = [
-    { title: 'Open Incidents', count: 5, color: '#52d0f0e7' },
-    { title: 'Closed Incidents', count: 10, color: '#52d0f0e7' },
-    { title: 'In Progress', count: 3, color: '#52d0f0e7' }
+    { title: 'Open Incidents', count: 5, color: '#52d0f0e7', status: 'Open' },
+    { title: 'Closed Incidents', count: 10, color: '#52d0f0e7', status: 'Closed' },
+    { title: 'In Progress', count: 3, color: '#52d0f0e7', status: 'In Progress' }
   ];
+
+  const handleStatusClick = (status) => {
+    // Navigate to the Incident Assignment page with the selected status
+    window.location.href = `/admin/incident_assignment?status=${status}`;
+  };
 
   return (
     <div>
-    <Navbar/>
-        <div className='button'>
-        <Button variant="contained" href="/admin/incident_assignment">Incident Assignment</Button>
-        </div>
+      <Navbar />
+      <div className='button'>
+        {/* Use Link component to navigate to the Incident Assignment page with the filter */}
+        <Link to={`/admin/incident_assignment?status=In Progress`} style={{ textDecoration: 'none' }}>
+        
+        </Link>
+      </div>
       <div className="circle-row">
         {incidents.map((incident, index) => (
           <IncidentCircle
@@ -39,11 +46,11 @@ const SupDash = () => {
             title={incident.title}
             count={incident.count}
             color={incident.color}
+            handleStatusClick={() => handleStatusClick(incident.status)}
           />
         ))}
       </div>
     </div>
-    
   );
 };
 

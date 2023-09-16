@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import { Drawer, List, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
 import { Dashboard, Report, List as ListIcon } from '@mui/icons-material'; // Import icons
-import './Sidepanel.css';
+import './Sidepanel.css'; // Import a CSS file for custom styles
 
 function Sidepanel(props) {
   return (
@@ -12,24 +12,42 @@ function Sidepanel(props) {
           &times;
         </a>
         <List>
-          <ListItem button component={Link} to="/employee/dashboard/:email" className="sidepanel-item" style={{ marginBottom: '30px' }}>
+          <ListItemButton
+            component={Link}
+            to="/employee/dashboard/:email"
+            className="sidepanel-item"
+            sx={{ '&:hover': { backgroundColor: '#DC143C' } }}
+            style={{ marginBottom: '50px' }}
+          >
             <ListItemIcon>
               <Dashboard />
             </ListItemIcon>
-            <ListItemText primary= "Dashboard" />
-          </ListItem>
-          <ListItem button component={Link} to="/employee/incident_form" className="sidepanel-item" style={{ marginBottom: '50px' }}>
+            <ListItemText primary="Dashboard" sx={{ color: '#000' }} />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            to="/employee/incident_form"
+            className="sidepanel-item"
+            sx={{ '&:hover': { backgroundColor: '#DC143C' } }}
+            style={{ marginBottom: '50px' }}
+          >
             <ListItemIcon>
               <Report />
             </ListItemIcon>
-            <ListItemText primary="Report an Incident" />
-          </ListItem>
-          <ListItem button component={Link} to="/employee/incident_list/:email" className="sidepanel-item" style={{ marginBottom: '50px' }}>
+            <ListItemText primary="Report an Incident" sx={{ color: '#000' }} />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            to="/employee/incident_list/:email"
+            className="sidepanel-item"
+            sx={{ '&:hover': { backgroundColor: '#DC143C' } }}
+            style={{ marginBottom: '50px' }}
+          >
             <ListItemIcon>
               <ListIcon />
             </ListItemIcon>
-            <ListItemText primary="Incident List" />
-          </ListItem>
+            <ListItemText primary="Incident List" sx={{ color: '#000' }} />
+          </ListItemButton>
         </List>
       </div>
     </Drawer>
