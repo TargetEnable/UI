@@ -126,7 +126,7 @@ const LoginForm = () => {
                 <Typography variant="body2" style={{ marginTop: 10, textAlign: 'center' }}>
                   Don't have an account?&nbsp;&nbsp;
                   <Link to="/register" style={{ marginRight: 1, color: 'black' }}><b>
-                    Register
+                    REGISTER
                     </b></Link>
                 </Typography>
               </Box>

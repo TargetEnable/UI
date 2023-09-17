@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Outlet } from "react-router-dom";
 import LoginPage from "../LoginPage";
 import RegistrationPage from "../RegistrationPage";
 import IncidentForm from "../IncidentForm";
@@ -28,7 +28,7 @@ export const AuthComponent = () => {
                     <Route exact path="/admin/dashboard" element={role ==='admin'?<SupDash/>:<PageNotFound/>}/>
                     <Route exact path="/admin/incident_assignment" element={role ==='admin'?<IncidentDetails/>:<PageNotFound/>}/>
                     <Route exact path="/support/incident" element={role ==='support'?<Incident/>:<PageNotFound/>}/>
-                    
+
                 </Routes>  
             </>    
         )

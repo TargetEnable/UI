@@ -8,8 +8,9 @@
   
   .circle-row {
     display: flex;
-    align-items: center;
-  }
+    justify-content: center;
+    gap: 20px; /* Adjust this value to control the spacing between circles */
+  } 
   
   .incident-circle {
     display: flex;
