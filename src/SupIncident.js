@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Navbar from './Navibar.js';
 import './SupIncident.css';
-import { getIncidents, updateIncidents, getsupport } from './services/userService';
+import { getIncidents, updateIncidents, getsupport} from './services/userService';
 import { toast } from 'react-toastify';
+import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
 
 const IncidentTable = () => {
@@ -12,36 +13,42 @@ const IncidentTable = () => {
   const [incidents, setIncidents] = useState([]);
   const [staffOptions, setStaffOptions] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('All');
-
+  
   useEffect(() => {
     // Fetch data from the backend when the component mounts
     const params = new URLSearchParams(window.location.search);
     const selectedStatusParam = params.get('status');
+    
     setSelectedStatus(selectedStatusParam || 'All');
     getIncidents()
       .then((data) => {
         // Update the state with the fetched data
         setIncidents(data);
       })
-      .catch((error) => {
+       .catch((error) => {
         console.error('Error fetching data:', error);
       });
 
     getsupport()
       .then((data) => {
+        
         // Update the state with the fetched data
         setStaffOptions(data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-      }); 
+      });
+
+      
     }, []);
+
   console.log(staffOptions);
 
   const toggleExpand = (incidentId) => {
     setExpandedIncidentId(expandedIncidentId === incidentId ? null : incidentId);
   };
 
+  
   const handleStaffSelect = (event) => {
     setSelectedStaff(event.target.value);
   };
@@ -80,6 +87,7 @@ const IncidentTable = () => {
         });
     }
   };
+
 
   const filteredIncidents = incidents.filter((incident) => selectedStatus === 'All' || incident.status === selectedStatus);
 
@@ -137,7 +145,7 @@ const IncidentTable = () => {
                 <TableRow onClick={() => toggleExpand(incident.id)}>
                   <TableCell>{incident.incidentTitle}</TableCell>
                   <TableCell>{incident.status}</TableCell>
-                  <TableCell>{incident.dateOfIncident}</TableCell>
+                  <TableCell>{format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}</TableCell> {/* Format date here */}
                   <TableCell>
                     <span className={`priority-indicator ${incident.priority.toLowerCase()}`}>
                       {incident.priority}
@@ -150,8 +158,8 @@ const IncidentTable = () => {
                     <TableCell colSpan={5}>
                       <div className="incident-details">
                         <Typography><b>Reporter: </b>{incident.assignedTo}</Typography>
-                        <Typography><b>Date Created: </b>{incident.dateOfIncident}</Typography>
-                        <Typography><b>Description: </b>{incident.incidentDescription}</Typography>
+                        <Typography><b>Date Created: </b>{format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}</Typography>
+                        <Typography><b>Incident Description: </b>{incident.incidentDescription}</Typography>
                         {incident.status === 'Open' && (
                           <div className="assign-section">
                             <InputLabel className="assign-label">Assign To:</InputLabel>
@@ -172,7 +180,7 @@ const IncidentTable = () => {
                         {incident.status === 'Closed' && (
                           <div className="resolution-section">
                             <Typography><b>Resolution: </b>{incident.resolutionDescription}</Typography>
-                            <Typography><b>Resolution Date: </b>{incident.resolutionDate}</Typography>
+                            <Typography><b>Resolution Date: </b>{format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a')}</Typography>
                           </div>
                         )}
                       </div>

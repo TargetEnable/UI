@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getIncidentList } from './services/userService';
 import Navbar from './Navibar.js';
+import { format } from 'date-fns';
+
 
 import {
   Table,
@@ -22,6 +24,8 @@ function IncidentList() {
   const [incidentData, setIncidentData] = useState([]);
   const [error, setError] = useState(null);
   const [filterStatus, setFilterStatus] = useState('All');
+  const [expandedIncidentId, setExpandedIncidentId] = useState(null);
+  
 
   useEffect(() => {
     const fetchIncidentData = async () => {
@@ -41,6 +45,15 @@ function IncidentList() {
 
   const handleFilterChange = (event) => {
     setFilterStatus(event.target.value);
+  };
+
+  const toggleExpand = (incidentId) => {
+    setExpandedIncidentId(expandedIncidentId === incidentId ? null : incidentId);
+  };
+
+  const assignSupportStaff = async (incidentId) => {
+    // Logic to display the assigned support staff for "In Progress" and "Closed" incidents
+    toggleExpand(incidentId); // Toggle the expansion to show the details
   };
 
   const filteredIncidentData = incidentData.filter((incident) => {
@@ -79,23 +92,54 @@ function IncidentList() {
             <TableHead>
               <TableRow>
                 <TableCell sx={{ fontSize: '1.1rem',fontWeight: 'bold' }}>Incident Title</TableCell>
-                <TableCell sx={{ fontSize: '1.1rem',fontWeight: 'bold' }}>Incident Description</TableCell>
                 <TableCell sx={{ fontSize: '1.1rem',fontWeight: 'bold' }}>Location</TableCell>
                 <TableCell sx={{ fontSize: '1.1rem',fontWeight: 'bold' }}>Cubicle</TableCell>
                 <TableCell sx={{ fontSize: '1.1rem',fontWeight: 'bold' }}>Category</TableCell>
                 <TableCell sx={{ fontSize: '1.1rem',fontWeight: 'bold' }}>Priority</TableCell>
+                <TableCell sx={{ fontSize: '1.1rem',fontWeight: 'bold' }}>Assigned staff</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {filteredIncidentData.map((incident) => (
-                <TableRow key={incident.id}>
+                <React.Fragment key={incident.id}>
+                   <TableRow onClick={() => toggleExpand(incident.id)}>
                   <TableCell>{incident.incidentTitle}</TableCell>
-                  <TableCell>{incident.incidentDescription}</TableCell>
                   <TableCell>{incident.location}</TableCell>
                   <TableCell>{incident.cubicle}</TableCell>
                   <TableCell>{incident.category}</TableCell>
-                  <TableCell>{incident.priority}</TableCell>
+                  <TableCell><span className={`priority-indicator ${incident.priority.toLowerCase()}`}>
+                        {incident.priority}
+                      </span></TableCell>
+                  <TableCell>{incident.assignedTo || 'Not Assigned'}</TableCell>
+
                 </TableRow>
+                {expandedIncidentId === incident.id && (
+                  <TableRow className="expanded-row">
+                    <TableCell colSpan={6}>
+                      <div className="incident-details">
+                        <Typography><b>Date Created : </b>{format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}</Typography>
+                        <Typography><b>Incident Description : </b>{incident.incidentDescription}</Typography>
+                        {incident.status === 'Open' && (
+                          <div className="assign-section">
+                            {/* Display details for Open incidents */}
+                          </div>
+                        )}
+                        {incident.status === 'In Progress' && (
+                          <div className="assign-section">
+                          </div>
+                        )}
+                        {incident.status === 'Closed' && (
+                          <div className="resolution-section">
+                            <Typography><b>Resolution Date : </b>{format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a')}</Typography>
+                            <Typography><b>Resolution Description : </b>{incident.resolutionDescription}</Typography>
+                            {/* Display details for Closed incidents */}
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )}
+              </React.Fragment>
               ))}
             </TableBody>
           </Table>

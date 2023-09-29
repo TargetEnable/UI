@@ -48,6 +48,7 @@ function Sidepanel(props) {
             </ListItemIcon>
             <ListItemText primary="Incident List" sx={{ color: '#000' }} />
           </ListItemButton>
+
         </List>
       </div>
     </Drawer>

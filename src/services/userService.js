@@ -48,3 +48,15 @@ export const getIncidents = () => {
       .then((response) => response.data);
   };
 
+  export const getCount = () => {
+    return myAxios
+      .get(`http://localhost:8008/count`)
+      .then((response) => response.data);
+  };
+
+  export const getIncidentCountsByEmail = (email) => {
+    return myAxios
+      .get(`http://localhost:8008/incident-counts/${email}`)
+      .then((response) => response.data);
+  };
+

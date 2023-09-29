@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Container, Table, TableBody, TableCell, TableContainer, Typography,TableHead, TableRow, Paper, Select, FormControl, InputLabel, MenuItem, Button, TextareaAutosize, TextField } from '@mui/material';
 import Navbar from './Navibar.js';
 import './EmpIncident.css';
+import { format } from 'date-fns';
 
 const IncidentTable = () => {
   const [expandedIncidentId, setExpandedIncidentId] = useState(null);
@@ -147,7 +148,7 @@ const IncidentTable = () => {
                 <TableRow onClick={() => toggleExpand(incident.id)}>
                   <TableCell>{incident.incidentTitle}</TableCell>
                   <TableCell>{incident.status}</TableCell>
-                  <TableCell>{incident.dateOfIncident}</TableCell>
+                  <TableCell>{format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}</TableCell>
                   <TableCell>
                     <span className={`priority-indicator ${incident.priority.toLowerCase()}`}>
                       {incident.priority}
@@ -156,7 +157,7 @@ const IncidentTable = () => {
                   {selectedStatus === 'Closed' && (
                     <>
                       <TableCell>{incident.resolutionDescription}</TableCell>
-                      <TableCell>{incident.resolutionDate}</TableCell>
+                      <TableCell>{format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a')}</TableCell>
                     </>
                   )}
                 </TableRow>
@@ -170,7 +171,7 @@ const IncidentTable = () => {
                         </p>
                         <p>
                           <b>Date Created: </b>
-                          {incident.dateOfIncident}
+                          {format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}
                         </p>
                         <p>
                           <b>Description: </b>
