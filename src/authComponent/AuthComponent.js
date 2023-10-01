@@ -9,7 +9,7 @@ import IncidentList from "../incidentlist";
 import SupDash from "../SupDash";
 import IncidentDetails from "../SupIncident";
 import Incident from "../EmpIncident";
-import Report from "../Report";
+import Report from "../report";
 import PageNotFound from "../Error";
 
 export const AuthComponent = () => {
