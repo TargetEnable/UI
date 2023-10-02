@@ -7,6 +7,7 @@ import { getIncidentCountsByEmail } from './services/userService';
 
 function Dashboard() {
   const email = localStorage.getItem('email');
+  //const name = localStorage.getItem('name');
 
   const containerStyle = {
     display: 'flex',

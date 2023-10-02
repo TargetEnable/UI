@@ -1,6 +1,5 @@
-// report.js
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
 import Navbar from './Navibar.js';
 import './SupIncident.css';
 import { getIncidents, getsupport } from './services/userService.js';
@@ -30,6 +29,36 @@ const Report = () => {
       });
   }, []);
 
+  // Function to convert table data to XML
+  const convertToXML = () => {
+    const xmlData = `
+      <incidents>
+        ${incidents.map((incident) => `
+          <incident>
+            <employeeName>${incident.employeeName}</employeeName>
+            <incidentTitle>${incident.incidentTitle}</incidentTitle>
+            <assignedTo>${incident.assignedTo || 'Not Assigned'}</assignedTo>
+            <dateCreated>${incident.dateCreated}</dateCreated>
+            <resolutionDate>${incident.resolutionDate || 'Not Resolved'}</resolutionDate>
+          </incident>
+        `).join('')}
+      </incidents>
+    `;
+
+    // Create a Blob containing the XML data
+    const blob = new Blob([xmlData], { type: 'application/xml' });
+
+    // Create a download link
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'incidents.xml';
+
+    // Trigger a download
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
       <Navbar />
@@ -38,6 +67,9 @@ const Report = () => {
           <Typography variant="h4" style={{ textAlign: 'center' }}>
             Reported Incidents
           </Typography>
+          <Button variant="contained" color="primary" onClick={convertToXML}>
+            Export to XML
+          </Button>
         </div>
         <TableContainer component={Paper}>
           <Table>
