@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAssignedIncident, getname } from './services/userService';
+import { getnamegeneral } from './services/userService';
 import Axios from 'axios';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,6 +16,7 @@ const IncidentTable = () => {
   const [resolutionDescription, setResolutionDescription] = useState('');
   const [resolutionDate, setResolutionDate] = useState('');
   const [userName, setUserName] = useState('');
+  const [reporterName, setReporterName] = useState({});
 
   useEffect(() => {
     // Fetch data from the backend when the component mounts
@@ -48,6 +50,26 @@ const IncidentTable = () => {
   const handleResolutionDateChange = (event) => {
     setResolutionDate(event.target.value);
   };
+
+  const fetchReporterName = async (email) => {
+    try {
+      const reporterName = await getnamegeneral(email);
+      setReporterName((prevNames) => ({ ...prevNames, [email]: reporterName }));
+    } catch (err) {
+      console.error('Error fetching reporter name:', err);
+      setReporterName((prevNames) => ({ ...prevNames, [email]: 'Unknown' }));
+    }
+  };
+
+  useEffect(() => {
+    // Fetch reporter names for all unique email addresses
+    const uniqueEmails = [...new Set(incidents.map((incident) => incident.email))];
+    uniqueEmails.forEach((email) => {
+      if (!reporterName[email]) {
+        fetchReporterName(email);
+      }
+    });
+  }, [incidents, reporterName]);
 
   const updateIncident = (incidentId, updatedIncidentData) => {
     Axios.patch(`http://localhost:8008/incidents/support/${incidentId}`, updatedIncidentData)
@@ -167,7 +189,7 @@ const IncidentTable = () => {
                       <div className="incident-details">
                         <p>
                           <b>Reporter: </b>
-                          {incident.assignedTo}
+                          {reporterName[incident.email] || 'Loading...'}
                         </p>
                         <p>
                           <b>Date Created: </b>

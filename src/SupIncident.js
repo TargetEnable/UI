@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Navbar from './Navibar.js';
 import './SupIncident.css';
-import { getIncidents, updateIncidents, getsupport} from './services/userService';
+import { getIncidents, updateIncidents, getsupport,getnamegeneral} from './services/userService';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +13,7 @@ const IncidentTable = () => {
   const [incidents, setIncidents] = useState([]);
   const [staffOptions, setStaffOptions] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('All');
+  const [reporterName, setReporterName] = useState({});
   
   useEffect(() => {
     // Fetch data from the backend when the component mounts
@@ -48,7 +49,26 @@ const IncidentTable = () => {
     setExpandedIncidentId(expandedIncidentId === incidentId ? null : incidentId);
   };
 
-  
+  const fetchReporterName = async (email) => {
+    try {
+      const reporterName = await getnamegeneral(email);
+      setReporterName((prevNames) => ({ ...prevNames, [email]: reporterName }));
+    } catch (err) {
+      console.error('Error fetching reporter name:', err);
+      setReporterName((prevNames) => ({ ...prevNames, [email]: 'Unknown' }));
+    }
+  };
+
+  useEffect(() => {
+    // Fetch reporter names for all unique email addresses
+    const uniqueEmails = [...new Set(incidents.map((incident) => incident.email))];
+    uniqueEmails.forEach((email) => {
+      if (!reporterName[email]) {
+        fetchReporterName(email);
+      }
+    });
+  }, [incidents, reporterName]);
+
   const handleStaffSelect = (event) => {
     setSelectedStaff(event.target.value);
   };
@@ -157,7 +177,7 @@ const IncidentTable = () => {
                   <TableRow className="expanded-row">
                     <TableCell colSpan={5}>
                       <div className="incident-details">
-                        <Typography><b>Reporter: </b>{incident.assignedTo}</Typography>
+                        <Typography><b>Reporter: </b>{reporterName[incident.email] || 'Loading...'}</Typography>
                         <Typography><b>Date Created: </b>{format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}</Typography>
                         <Typography><b>Incident Description: </b>{incident.incidentDescription}</Typography>
                         {incident.status === 'Open' && (
