@@ -5,14 +5,10 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Container, Typography, Paper, TextField, FormControl, InputLabel, Select, MenuItem, Button, Grid, Box } from '@mui/material';
 
-const generateUniqueId = () => {
-  return Math.floor(Math.random() * 1000000); // Adjust the range as needed
-};
 const IncidentForm = () => {
   const email = localStorage.getItem('email');
   const [data, setFormData] = useState({
     email: email,
-    id: generateUniqueId(),
     incidentTitle: "",
     incidentDescription: "",
     location: "",
