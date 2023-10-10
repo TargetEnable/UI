@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Navbar from './Navibar.js';
 import './SupIncident.css';
-import { getIncidents, updateIncidents, getsupport} from './services/userService';
+import { getIncidents, updateIncidents, getsupport, getname} from './services/userService';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
@@ -13,6 +13,7 @@ const IncidentTable = () => {
   const [incidents, setIncidents] = useState([]);
   const [staffOptions, setStaffOptions] = useState([]);
   const [selectedStatus, setSelectedStatus] = useState('All');
+  const [reporterNames, setReporterNames] = useState({});
   
   useEffect(() => {
     // Fetch data from the backend when the component mounts
@@ -21,13 +22,18 @@ const IncidentTable = () => {
     
     setSelectedStatus(selectedStatusParam || 'All');
     getIncidents()
-      .then((data) => {
-        // Update the state with the fetched data
-        setIncidents(data);
-      })
-       .catch((error) => {
-        console.error('Error fetching data:', error);
+    .then((data) => {
+      setIncidents(data);
+    
+      // Fetch reporter names for each incident
+      data.forEach((incident) => {
+        fetchReporterName(incident.email); // Call the fetchReporterName function for each incident's email
       });
+    })
+
+    .catch((error) => {
+      console.error('Error fetching data:', error);
+    });
 
     getsupport()
       .then((data) => {
@@ -41,6 +47,24 @@ const IncidentTable = () => {
 
       
     }, []);
+
+    // Function to fetch reporter's name
+  const fetchReporterName = (email) => {
+    getname(email)
+      .then((name) => {
+        // Update the reporterNames state with the name
+        setReporterNames((prevNames) => ({
+          ...prevNames,
+          [email]: name,
+        }));
+      })
+      .catch((error) => {
+        console.error('Error fetching reporter name:', error);
+        // Handle the error as needed
+      });
+  };
+
+    
 
   console.log(staffOptions);
 
@@ -157,7 +181,7 @@ const IncidentTable = () => {
                   <TableRow className="expanded-row">
                     <TableCell colSpan={5}>
                       <div className="incident-details">
-                        <Typography><b>Reporter: </b>{incident.assignedTo}</Typography>
+                        <Typography><b>Reporter: </b>{reporterNames[incident.email] || 'N/A'}</Typography>
                         <Typography><b>Date Created: </b>{format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}</Typography>
                         <Typography><b>Incident Description: </b>{incident.incidentDescription}</Typography>
                         {incident.status === 'Open' && (

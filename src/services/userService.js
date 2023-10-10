@@ -1,7 +1,6 @@
 import { myAxios } from "./helper";
 
 export const register=(user)=>{
-
 return myAxios
     .post('http://localhost:8008/register',user)
     .then((response) => response.data);
@@ -60,3 +59,17 @@ export const getIncidents = () => {
       .then((response) => response.data);
   };
 
+
+  export const getIncidentsByWeek = () => {
+    return myAxios
+      .get('http://localhost:8008/incidents-by-week')
+      .then((response) => response.data);
+  };
+
+  export const getIncidentPriorityCounts = () => {
+    return myAxios
+      .get('http://localhost:8008/incident-priority-count')
+      .then((response) => response.data);
+  };
+
+ 
