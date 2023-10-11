@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
 import Navbar from './Navibar.js';
-import './SupIncident.css';
 import { getIncidents, getsupport } from './services/userService.js';
-import XLSX from 'xlsx';
+import { format } from 'date-fns';
 
 const Report = () => {
   const [incidents, setIncidents] = useState([]);
   const [staffOptions, setStaffOptions] = useState([]);
-
+  
   useEffect(() => {
     // Fetch data from the backend when the component mounts
     getIncidents()
@@ -30,11 +29,31 @@ const Report = () => {
       });
   }, []);
 
-  const convertToExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(incidents);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'incidents');
-    XLSX.writeFile(workbook, 'incidents.xlsx');
+  // Function to convert table data to CSV
+  const convertToCSV = () => {
+    // Create a CSV header row
+    const csvHeader = 'Employee Email,Incident Title,Assigned staff,Date created,Resolved Date\n';
+
+    // Create a CSV data row for each incident
+    const csvData = incidents.map((incident) => (
+      `${incident.email},${incident.incidentTitle},${incident.assignedTo || 'Not Assigned'},${format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')},${format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a') || 'Not Resolved'}`
+    )).join('\n');
+
+    // Combine the header and data
+    const csvContent = `${csvHeader}${csvData}`;
+
+    // Create a Blob containing the CSV data
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+
+    // Create a download link
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'incidents.csv';
+
+    // Trigger a download
+    a.click();
+    window.URL.revokeObjectURL(url);
   };
 
   return (
@@ -45,15 +64,23 @@ const Report = () => {
           <Typography variant="h4" style={{ textAlign: 'center' }}>
             Reported Incidents
           </Typography>
-          <Button variant="contained" color="primary" onClick={convertToExcel}>
-            Export to Excel
+        </div>
+        <div className="export-button-container">
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            style={{ float: 'right', width: '100px' }} // Set the width as desired
+            onClick={convertToCSV}
+          >
+            Export
           </Button>
         </div>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Employee Name</TableCell>
+                <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Employee Email</TableCell>
                 <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Incident Title</TableCell>
                 <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Assigned staff</TableCell>
                 <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Date created</TableCell>
@@ -63,11 +90,11 @@ const Report = () => {
             <TableBody>
               {incidents.map((incident) => (
                 <TableRow key={incident.id}>
-                  <TableCell>{incident.employeeName}</TableCell>
+                  <TableCell>{incident.email}</TableCell>
                   <TableCell>{incident.incidentTitle}</TableCell>
                   <TableCell>{incident.assignedTo || 'Not Assigned'}</TableCell>
-                  <TableCell>{incident.dateCreated}</TableCell>
-                  <TableCell>{incident.resolutionDate || 'Not Resolved'}</TableCell>
+                  <TableCell>{format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}</TableCell>
+                  <TableCell>{format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a') || 'Not Resolved'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

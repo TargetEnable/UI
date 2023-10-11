@@ -60,3 +60,9 @@ export const getIncidents = () => {
       .then((response) => response.data);
   };
 
+   export const getnamegeneral = (email) => {
+    return myAxios
+      .get(`http://localhost:8008/IncidentEmail/${email}`)
+      .then((response) => response.data);
+  };
+
