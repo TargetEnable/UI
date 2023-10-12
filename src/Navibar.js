@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
+import ReportIcon from '@mui/icons-material/Description'; // Import the icon for the Report button
 import './navbar.css';
 
 import { Link, useLocation } from 'react-router-dom';
@@ -26,8 +27,11 @@ function Navbar() {
   };
 
   let homeLink;
+  let reportLink;
+
   if (role === 'admin') {
     homeLink = '/admin/dashboard';
+    reportLink = '/admin/report';
   } else if (role === 'team') {
     homeLink = '/employee/dashboard/:email';
   } else if (role === 'support') {
@@ -57,11 +61,16 @@ function Navbar() {
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             {showHomeButton && (
-              <Link to={homeLink} style={{ marginRight: '10px', display: 'flex', alignItems: 'center' }} class="icon">
+              <Link to={homeLink} style={{ marginRight: '10px', display: 'flex', alignItems: 'center' }} className="icon">
                 <HomeIcon /> HOME
               </Link>
             )}
-            <Link to="/" style={{ display: 'flex', alignItems: 'center' }} class="icon">
+            {role === 'admin' && location.pathname === homeLink && (
+              <Link to={reportLink} style={{ marginRight: '10px', display: 'flex', alignItems: 'center' }} className="icon">
+                <ReportIcon /> REPORT
+              </Link>
+            )}
+            <Link to="/" style={{ display: 'flex', alignItems: 'center' }} className="icon">
               <LogoutIcon /> LOGOUT
             </Link>
           </Box>

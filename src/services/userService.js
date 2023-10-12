@@ -65,3 +65,5 @@ export const getIncidents = () => {
       .then((response) => response.data);
   };
 
+  
+
