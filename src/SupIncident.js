@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import Navbar from './Navibar.js';
 import './SupIncident.css';
-import { getIncidents, updateIncidents, getsupport, getname, getnamegeneral} from './services/userService';
+import { getIncidents, updateIncidents, getsupport,  getnamegeneral} from './services/userService';
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
