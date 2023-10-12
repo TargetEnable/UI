@@ -16,6 +16,7 @@ export const login = (user) => {
         .post('http://localhost:8008/', user)
         .then((response) => response.data);
 };
+
 export const getIncidentList = (email) => {
   return myAxios
     .get(`http://localhost:8008/incidents/${email}`)
@@ -74,6 +75,12 @@ export const getIncidents = () => {
   export const getIncidentPriorityCounts = () => {
     return myAxios
       .get('http://localhost:8008/incident-priority-count')
+      .then((response) => response.data);
+  };
+
+  export const getEmployeeIncidentPriorityCounts = (email) => {
+    return myAxios
+      .get(`http://localhost:8008/employee-incident-priority-count/${email}`)
       .then((response) => response.data);
   };
 

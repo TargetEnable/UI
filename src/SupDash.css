@@ -1,15 +1,15 @@
 .app-container {
-  display: flex;
+  display: grid;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f0f0f0;
 }
 
 .circle-row {
   display: flex;
   justify-content: center;
-  gap: 20px; 
+  gap: 120px; 
 } 
 
 .incident-circle {
@@ -20,8 +20,8 @@
 }
 
 .white-square {
-  width: 140px;
-  height: 140px;
+  width: 150px;
+  height: 150px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   background-color: rgba(83, 77, 77, 0.5);
   box-shadow: inset -5px -5px #52d0f0e7;
@@ -32,7 +32,7 @@
 }
 
 .white-title-square {
-  width: 140px;
+  width: 180px;
   height: 40px;
   box-shadow: 0 0 10px rgba(177, 167, 167, 0.1);
   background-color: rgba(143, 132, 132, 0.5);
@@ -62,37 +62,35 @@
   font-weight: bold;
   color: white;
 }
-.button{
-  color: black;
-  display: flex;
-  position: relative;
-  margin-top: 10px;
-  margin-right: 1100px;
-  margin-bottom: 50px;
-}
-.chart-container {
-  display: flex; 
-  justify-content: space-between; 
- align-items: center; 
-}
 
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
 .charts-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
   margin-top: 20px;
   width: 100%;
   max-width: 1200px;
 }
 
-
 .line-graph-container {
-  width: 48%; 
+  width: 70%;
+  margin-left: 30px;
 }
 
-
 .priority-chart-container {
-  width: 48%; 
-  margin-left: 60px;
+  display: flex;
+  width: 20%;
+  margin-left: 70px;
+}
+
+.pie-chart {
+  display: flex;
+  margin-left: 120px; /* Adjust the margin to your desired spacing */
 }
 
