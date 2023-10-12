@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAssignedIncident } from './services/userService';
+import { getAssignedIncident, getname } from './services/userService';
 import { getnamegeneral } from './services/userService';
 import Axios from 'axios';
 import { toast } from 'react-toastify';
