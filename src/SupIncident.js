@@ -6,7 +6,6 @@ import { getIncidents, updateIncidents, getsupport,  getnamegeneral} from './ser
 import { toast } from 'react-toastify';
 import { format } from 'date-fns';
 import 'react-toastify/dist/ReactToastify.css';
-import * as XLSX from 'xlsx'; // Import XLSX object
 
 const IncidentTable = () => {
   const [expandedIncidentId, setExpandedIncidentId] = useState(null);

@@ -7,7 +7,7 @@ import { format } from 'date-fns';
 const Report = () => {
   const [incidents, setIncidents] = useState([]);
   const [staffOptions, setStaffOptions] = useState([]);
-  
+
   useEffect(() => {
     // Fetch data from the backend when the component mounts
     getIncidents()
@@ -36,7 +36,9 @@ const Report = () => {
 
     // Create a CSV data row for each incident
     const csvData = incidents.map((incident) => (
-      `${incident.email},${incident.incidentTitle},${incident.assignedTo || 'Not Assigned'},${format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')},${format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a') || 'Not Resolved'}`
+      `${incident.email},${incident.incidentTitle},${incident.assignedTo || 'Not Assigned'},${format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')},${incident.resolutionDate
+        ? format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a')
+        : 'Not Resolved'}`
     )).join('\n');
 
     // Combine the header and data
@@ -94,7 +96,11 @@ const Report = () => {
                   <TableCell>{incident.incidentTitle}</TableCell>
                   <TableCell>{incident.assignedTo || 'Not Assigned'}</TableCell>
                   <TableCell>{format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}</TableCell>
-                  <TableCell>{format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a') || 'Not Resolved'}</TableCell>
+                  <TableCell>
+                    {incident.resolutionDate
+                      ? format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a')
+                      : 'Not Resolved'}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

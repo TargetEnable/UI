@@ -10,6 +10,7 @@ import SupDash from "../SupDash";
 import IncidentDetails from "../SupIncident";
 import Incident from "../EmpIncident";
 import PageNotFound from "../Error";
+import Report from "../report";
 
 export const AuthComponent = () => {
     const role = localStorage.getItem('role');
@@ -51,6 +52,11 @@ export const AuthComponent = () => {
                             exact
                             path="/admin/incident_assignment"
                             element={<IncidentDetails />}
+                        />
+                        <Route
+                            exact
+                            path="/admin/report"
+                            element={<Report />}
                         />
                     </>
                 )}
