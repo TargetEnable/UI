@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAssignedIncident, getname } from './services/userService';
+import { getAssignedIncident } from './services/userService';
 import { getnamegeneral } from './services/userService';
 import Axios from 'axios';
 import { toast } from 'react-toastify';
@@ -17,19 +17,12 @@ const IncidentTable = () => {
   const [resolutionDate, setResolutionDate] = useState('');
   const [userName, setUserName] = useState('');
   const [reporterName, setReporterName] = useState({});
-  const [name, setName] = useState('');
+  
 
   useEffect(() => {
     // Fetch data from the backend when the component mounts
     const email = localStorage.getItem('email');
 
-    getname(email)
-    .then((data) => {
-      setName(data); // Set the employee's name in the state
-    })
-    .catch((error) => {
-      console.error('Error fetching employee name:', error);
-    });
 
     async function fetchData() {
       try {
@@ -147,7 +140,7 @@ const IncidentTable = () => {
 
   return (
     <Container>
-      <h1>Welcome, {name}!</h1>
+     
       <Typography variant="h4" style={{ textAlign: 'center', marginTop: '1.5em' }}>
         Reported Incidents
       </Typography>
