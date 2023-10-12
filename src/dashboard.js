@@ -7,6 +7,7 @@ import { getIncidentCountsByEmail, getname, getEmployeeIncidentPriorityCounts } 
 
 function Dashboard() {
   const email = localStorage.getItem('email');
+  //const name = localStorage.getItem('name');
   const [name, setName] = useState('');
 
   const containerStyle = {

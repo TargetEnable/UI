@@ -9,6 +9,7 @@ import IncidentList from "../incidentlist";
 import SupDash from "../SupDash";
 import IncidentDetails from "../SupIncident";
 import Incident from "../EmpIncident";
+import Report from "../report";
 import PageNotFound from "../Error";
 
 export const AuthComponent = () => {
@@ -27,6 +28,7 @@ export const AuthComponent = () => {
                     <Route exact path="/employee/incident_list/:email" element={role ==='team'?<IncidentList/>:<PageNotFound/>}/>
                     <Route exact path="/admin/dashboard" element={role ==='admin'?<SupDash/>:<PageNotFound/>}/>
                     <Route exact path="/admin/incident_assignment" element={role ==='admin'?<IncidentDetails/>:<PageNotFound/>}/>
+                    <Route exact path="/admin/report" element={role ==='admin'?<Report/>:<PageNotFound/>}/>
                     <Route exact path="/support/incident" element={role ==='support'?<Incident/>:<PageNotFound/>}/>
 
                 </Routes>  
