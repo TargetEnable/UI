@@ -1,31 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getIncidentList } from './services/userService';
-import { getnamegeneral } from './services/userService';
-import Navbar from './Navibar.js';
-import { format } from 'date-fns';
-
-
+import { DataGrid } from '@mui/x-data-grid';
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Typography,
   Select,
   MenuItem,
 } from '@mui/material';
+import Navbar from './Navibar.js';
 
 function IncidentList() {
   const location = useLocation();
   const [incidentData, setIncidentData] = useState([]);
   const [error, setError] = useState(null);
   const [filterStatus, setFilterStatus] = useState('All');
-  const [expandedIncidentId, setExpandedIncidentId] = useState(null);
-  const [reporterName, setReporterName] = useState({});
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     const fetchIncidentData = async () => {
@@ -47,36 +36,32 @@ function IncidentList() {
     setFilterStatus(event.target.value);
   };
 
-  const toggleExpand = (incidentId) => {
-    setExpandedIncidentId(expandedIncidentId === incidentId ? null : incidentId);
-  };
-
-  const fetchReporterName = async (email) => {
-    try {
-      const reporterName = await getnamegeneral(email);
-      setReporterName((prevNames) => ({ ...prevNames, [email]: reporterName }));
-    } catch (err) {
-      console.error('Error fetching reporter name:', err);
-      setReporterName((prevNames) => ({ ...prevNames, [email]: 'Unknown' }));
-    }
-  };
-
-  useEffect(() => {
-    // Fetch reporter names for all unique email addresses
-    const uniqueEmails = [...new Set(incidentData.map((incident) => incident.email))];
-    uniqueEmails.forEach((email) => {
-      if (!reporterName[email]) {
-        fetchReporterName(email);
+  const handleSort = (column) => {
+    const sortedData = [...incidentData].sort((a, b) => {
+      const valueA = a[column].toUpperCase();
+      const valueB = b[column].toUpperCase();
+      if (sortOrder === 'asc') {
+        return valueA.localeCompare(valueB);
+      } else {
+        return valueB.localeCompare(valueA);
       }
     });
-  }, [incidentData, reporterName]);
+    setIncidentData(sortedData);
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+  };
 
-  const filteredIncidentData = incidentData.filter((incident) => {
-    if (filterStatus === 'All') {
-      return true;
-    }
-    return incident.status === filterStatus;
-  });
+  const columns = [
+    { field: 'incidentTitle', headerName: 'Incident Title', width: 200 },
+    { field: 'location', headerName: 'Location', width: 80 },
+    { field: 'cubicle', headerName: 'Cubicle', width: 80 },
+    { field: 'dateOfIncident', headerName: 'Date Created', width: 280 },
+    { field: 'category', headerName: 'Category', width: 130 },
+    { field: 'priority', headerName: 'Priority', width: 130 },
+    { field: 'status', headerName: 'Status', width: 130 },
+    { field: 'assignedTo', headerName: 'Assigned staff', width: 200 },
+    { field: 'resolution', headerName: 'Resolution', width: 200 }, // Added resolution field
+    { field: 'resolutionDate', headerName: 'Resolution Date', width: 280 }, // Added resolutionDate field
+  ];
 
   return (
     <div>
@@ -84,8 +69,8 @@ function IncidentList() {
       <Typography variant="h4" style={{ textAlign: 'center', marginTop: '60px' }}>
         Incident List
       </Typography>
-      <div>
-        <Select
+      {/* <div>
+        {/* <Select
           label="Filter by Status"
           value={filterStatus}
           onChange={handleFilterChange}
@@ -95,82 +80,33 @@ function IncidentList() {
           <MenuItem value="Open">Open</MenuItem>
           <MenuItem value="Closed">Closed</MenuItem>
           <MenuItem value="In Progress">In Progress</MenuItem>
-        </Select>
-      </div>
+        </Select> 
+      </div> */}
       {error ? (
         <Typography color="error">Error: {error.message}</Typography>
       ) : (
-        <TableContainer component={Paper} sx={{ maxWidth: '90%', margin: 'auto' }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Incident Title</TableCell>
-                <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Location</TableCell>
-                <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Cubicle</TableCell>
-                <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Category</TableCell>
-                <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Priority</TableCell>
-                <TableCell sx={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Assigned staff</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredIncidentData.map((incident) => (
-                <React.Fragment key={incident.id}>
-                  <TableRow onClick={() => toggleExpand(incident.id)}>
-                    <TableCell>{incident.incidentTitle}</TableCell>
-                    <TableCell>{incident.location}</TableCell>
-                    <TableCell>{incident.cubicle}</TableCell>
-                    <TableCell>{incident.category}</TableCell>
-                    <TableCell>
-                      <span className={`priority-indicator ${incident.priority.toLowerCase()}`}>
-                        {incident.priority}
-                      </span>
-                    </TableCell>
-                    <TableCell>{incident.assignedTo || 'Not Assigned'}</TableCell>
-                  </TableRow>
-                  {expandedIncidentId === incident.id && (
-                    <TableRow className="expanded-row">
-                      <TableCell colSpan={6}>
-                        <div className="incident-details">
-                          <Typography>
-                            <b>Reporter: </b>
-                            {reporterName[incident.email] || 'Loading...'}
-                          </Typography>
-                          <Typography>
-                            <b>Date Created : </b>
-                            {format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')}
-                          </Typography>
-                          <Typography>
-                            <b>Incident Description : </b>
-                            {incident.incidentDescription}
-                          </Typography>
-                          {incident.status === 'Open' && (
-                            <div className="assign-section">{/* Display details for Open incidents */}</div>
-                          )}
-                          {incident.status === 'In Progress' && (
-                            <div className="assign-section">{/* Display details for In Progress incidents */}</div>
-                          )}
-                          {incident.status === 'Closed' && (
-                            <div className="resolution-section">
-                              <Typography>
-                                <b>Resolution Date : </b>
-                                {format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a')}
-                              </Typography>
-                              <Typography>
-                                <b>Resolution Description : </b>
-                                {incident.resolutionDescription}
-                              </Typography>
-                              {/* Display details for Closed incidents */}
-                            </div>
-                          )}
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </React.Fragment>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+          <div style={{ width: '100%', maxWidth: '1200px' }}>
+            <DataGrid
+              rows={incidentData}
+              columns={columns}
+              pageSize={5}
+              sortModel={[
+                {
+                  field: 'incidentTitle',
+                  sort: sortOrder,
+                },
+              ]}
+              onSortModelChange={(params) => {
+                const sortModel = params.sortModel[0];
+                if (sortModel) {
+                  handleSort(sortModel.field);
+                }
+              }}
+              autoHeight
+            />
+          </div>
+        </div>
       )}
     </div>
   );
