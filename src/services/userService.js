@@ -6,6 +6,12 @@ export const register=(user)=>{
   .then((response) => response.data);
 };
 
+export const check=(user)=>{
+  return myAxios
+  .post('http://localhost:8008/check',user)
+  .then((response) => response.data);
+};
+
 export const submitIncident=(user)=>{
   return myAxios
       .post('http://localhost:8008/incident',user)
@@ -82,4 +88,4 @@ export const getIncidentCountsByEmail = (email) => {
       .then((response) => response.data);
   };
 
- 
+  

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import bcrypt from 'bcryptjs';
 import { Link } from 'react-router-dom';
-import { register } from './services/userService';
+import { register,check } from './services/userService';
 import { toast } from 'react-toastify';
 import { Button, TextField, FormControl, InputLabel, Select, MenuItem, Container, Typography, CssBaseline, Paper } from '@mui/material';
 
@@ -44,12 +44,15 @@ const RegistrationForm = () => {
 
     const hashedPassword = bcrypt.hashSync(formData.password, 10);
     try {
+      const checkResponse = await check({...formData});
+      console.log(checkResponse);
       const response = await register({ ...formData, password: hashedPassword });
       console.log(hashedPassword);
       console.log(response);
        // This will log the response data from the backend
 
       // Handle success
+      toast.success(checkResponse);
       toast.success(response);
       window.location.href = '/';
 

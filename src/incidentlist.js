@@ -59,7 +59,7 @@ function IncidentList() {
     { field: 'priority', headerName: 'Priority', width: 130 },
     { field: 'status', headerName: 'Status', width: 130 },
     { field: 'assignedTo', headerName: 'Assigned staff', width: 200 },
-    { field: 'resolution', headerName: 'Resolution', width: 200 }, // Added resolution field
+    { field: 'resolutionDescription', headerName: 'Resolution', width: 200 }, // Added resolution field
     { field: 'resolutionDate', headerName: 'Resolution Date', width: 280 }, // Added resolutionDate field
   ];
 
@@ -82,7 +82,7 @@ function IncidentList() {
           <MenuItem value="In Progress">In Progress</MenuItem>
         </Select> 
       </div> */}
-      {error ? (
+     {error ? (
         <Typography color="error">Error: {error.message}</Typography>
       ) : (
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
@@ -98,8 +98,9 @@ function IncidentList() {
                 },
               ]}
               onSortModelChange={(params) => {
-                const sortModel = params.sortModel[0];
-                if (sortModel) {
+                // Check if params.sortModel is defined and not empty
+                if (params.sortModel && params.sortModel.length > 0) {
+                  const sortModel = params.sortModel[0];
                   handleSort(sortModel.field);
                 }
               }}
