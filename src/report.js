@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button, Select, MenuItem } from '@mui/material';
 import Navbar from './Navibar.js';
 import { getIncidents, getsupport } from './services/userService.js';
-import { format } from 'date-fns';
+import { format, subHours, subWeeks, subMonths } from 'date-fns';
 
 const Report = () => {
   const [incidents, setIncidents] = useState([]);
+  const [displayedIncidents, setDisplayedIncidents] = useState([]);
   const [staffOptions, setStaffOptions] = useState([]);
+  const [filter, setFilter] = useState('all');
 
   useEffect(() => {
     // Fetch data from the backend when the component mounts
     getIncidents()
       .then((data) => {
-        // Update the state with the fetched data
         setIncidents(data);
+        setDisplayedIncidents(data);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -21,7 +23,6 @@ const Report = () => {
 
     getsupport()
       .then((data) => {
-        // Update the state with the fetched data
         setStaffOptions(data);
       })
       .catch((error) => {
@@ -29,13 +30,44 @@ const Report = () => {
       });
   }, []);
 
-  // Function to convert table data to CSV
+  const filterIncidents = (selectedFilter) => {
+    setFilter(selectedFilter);
+
+    switch (selectedFilter) {
+      case '1hour':
+        setDisplayedIncidents(incidents.filter((incident) =>
+          subHours(new Date(), 1) <= new Date(incident.dateOfIncident)
+        ));
+        break;
+      case '24hours':
+        setDisplayedIncidents(incidents.filter((incident) =>
+          subHours(new Date(), 24) <= new Date(incident.dateOfIncident)
+        ));
+        break;
+      case 'week':
+        setDisplayedIncidents(incidents.filter((incident) =>
+          subWeeks(new Date(), 1) <= new Date(incident.dateOfIncident)
+        ));
+        break;
+      case 'month':
+        setDisplayedIncidents(incidents.filter((incident) =>
+          subMonths(new Date(), 1) <= new Date(incident.dateOfIncident)
+        ));
+        break;
+      case 'all':
+        setDisplayedIncidents(incidents);
+        break;
+      default:
+        setDisplayedIncidents(incidents);
+    }
+  };
+
   const convertToCSV = () => {
     // Create a CSV header row
     const csvHeader = 'Employee Email,Incident Title,Assigned staff,Date created,Resolved Date\n';
 
     // Create a CSV data row for each incident
-    const csvData = incidents.map((incident) => (
+    const csvData = displayedIncidents.map((incident) => (
       `${incident.email},${incident.incidentTitle},${incident.assignedTo || 'Not Assigned'},${format(new Date(incident.dateOfIncident), 'dd/MM/yyyy hh:mm:ss a')},${incident.resolutionDate
         ? format(new Date(incident.resolutionDate), 'dd/MM/yyyy hh:mm:ss a')
         : 'Not Resolved'}`
@@ -66,13 +98,23 @@ const Report = () => {
           <Typography variant="h4" style={{ textAlign: 'center' }}>
             Reported Incidents
           </Typography>
+          <Select
+            value={filter}
+            onChange={(e) => filterIncidents(e.target.value)}
+          >
+            <MenuItem value="all">All</MenuItem>
+            <MenuItem value="1hour">Last 1 Hour</MenuItem>
+            <MenuItem value="24hours">Last 24 Hours</MenuItem>
+            <MenuItem value="week">Last Week</MenuItem>
+            <MenuItem value="month">Last Month</MenuItem>
+          </Select>
         </div>
         <div className="export-button-container">
           <Button
             variant="contained"
             color="primary"
             size="small"
-            style={{ float: 'right', width: '100px' }} // Set the width as desired
+            style={{ float: 'right', width: '100px' }}
             onClick={convertToCSV}
           >
             Export
@@ -90,7 +132,7 @@ const Report = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {incidents.map((incident) => (
+              {displayedIncidents.map((incident) => (
                 <TableRow key={incident.id}>
                   <TableCell>{incident.email}</TableCell>
                   <TableCell>{incident.incidentTitle}</TableCell>
